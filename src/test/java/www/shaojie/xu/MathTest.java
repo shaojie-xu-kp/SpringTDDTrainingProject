@@ -1,5 +1,8 @@
 package www.shaojie.xu;
 
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
+
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,28 +20,36 @@ public class MathTest {
 	
 	@Mock
 	Math mathObj;
-	
-	@Mock
-	Math mathObj2;
-	
+		
 	@Before
 	public void init(){
-		
 		MockitoAnnotations.initMocks(this);
 		Mockito.when(mathObj.add(1, 2)).thenReturn(3);
-		Mockito.when(mathObj2.substract(3, 1)).thenReturn(2);
-		
+		Mockito.when(mathObj.substract(3, 1)).thenReturn(2);
+		Mockito.when(mathObj.multiply(anyInt(), eq(0))).thenReturn(0);
+		Mockito.when(mathObj.divide(anyInt(),eq(0))).thenThrow(new ArithmeticException());
 	}
 	
 	@Test
 	public void whenAddUsedThenReturnValueIsTheirSum(){
-		Assert.assertThat(3, Matchers.equalTo(mathObj.add(1, 2)));
+		Assert.assertThat(mathObj.add(1, 2), Matchers.equalTo(3));
 	}
 	
 	@Test
 	public void whenSubtractUsedThenReturnValueIsTheirMinus(){
-		Assert.assertThat(2, Matchers.equalTo(mathObj2.substract(3, 1)));
+		Assert.assertThat(mathObj.substract(3, 1), Matchers.equalTo(2));
 	}
+	
+	@Test(expected = ArithmeticException.class)
+	public void whenDividedByZeroThenThrowRuntimeException(){
+		mathObj.divide(2, 0);
+	}
+	
+	@Test
+	public void whenMultiplyByZeroThenReturnValueIsZero(){
+		Assert.assertThat(mathObj.multiply(2, 0), Matchers.equalTo(0));
+	}
+
 	
 
 }
