@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.verification.VerificationMode;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -33,6 +34,8 @@ public class MathTest {
 	@Test
 	public void whenAddUsedThenReturnValueIsTheirSum(){
 		Assert.assertThat(mathObj.add(1, 2), Matchers.equalTo(3));
+		Mockito.verify(mathObj).add(1, 2);
+		Mockito.verify(mathObj, Mockito.times(1)).add(eq(1),eq(2));
 	}
 	
 	@Test
